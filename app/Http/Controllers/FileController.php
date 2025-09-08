@@ -19,8 +19,11 @@ class FileController extends Controller
             $folder->touch('last_accessed_at');
         }
 
+        $excludedFileNames = ['file jadwal semester', 'id card'];
+
         $query = File::where('created_by', Auth::id())
-            ->where('parent_id', $folder?->id);
+            ->where('parent_id', $folder?->id)
+            ->whereNotIn('name', $excludedFileNames);
 
         if ($request->filled('modified')) {
             $this->applyFilters($query, $request);
@@ -35,6 +38,7 @@ class FileController extends Controller
         if (! $folder) {
             $recentItems = File::where('created_by', Auth::id())
                 ->whereNotNull('last_accessed_at')
+                ->whereNotIn('name', $excludedFileNames)
                 ->orderBy('last_accessed_at', 'desc')
                 ->limit(8)
                 ->get();

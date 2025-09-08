@@ -29,7 +29,7 @@
                         </button>
                         <div x-show="open" @click.outside="open = false" x-cloak class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-20 border">
                             <a href="#" @click.prevent="showEditModal = true; editItem = { id: {{ $subFolder->id }}, name: '{{ addslashes($subFolder->name) }}', action: '{{ route('file.update', $subFolder) }}' }; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Rename</a>
-                            <form action="{{ route('file.delete', $subFolder) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus folder ini?')"> @csrf @method('DELETE') <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Delete</button></form>
+                            <form action="{{ route('file.destroy', $subFolder) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus folder ini?')"> @csrf @method('DELETE') <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Delete</button></form>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                             </button>
                             <div x-show="open" @click.outside="open = false" x-cloak class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
                                 <div class="py-1" role="menu" aria-orientation="vertical">
-                                    <a href="{{ route('file.download', $file) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download</a><a href="#" @click.prevent="showEditModal = true; editItem = { id: {{ $file->id }}, name: '{{ addslashes($file->name) }}', action: '{{ route('file.update', $file) }}' }; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Rename</a><form action="{{ route('file.delete', $file) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">@csrf @method('DELETE')<button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Delete</button></form>
+                                    <a href="{{ route('file.download', $file) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download</a><a href="#" @click.prevent="showEditModal = true; editItem = { id: {{ $file->id }}, name: '{{ addslashes($file->name) }}', action: '{{ route('file.update', $file) }}' }; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Rename</a><form action="{{ route('file.destroy', $file) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">@csrf @method('DELETE')<button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Delete</button></form>
                                 </div>
                             </div>
                         </div>

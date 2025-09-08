@@ -1,5 +1,5 @@
 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4 sm:mb-0">Terakhir dibuat</h2>
+    <h2 class="text-xl font-semibold text-gray-700 mb-4 sm:mb-0">Recently Created</h2>
 </div>
 
 <div class="bg-white rounded-lg shadow-sm">
