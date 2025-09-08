@@ -1,21 +1,14 @@
 <aside class="w-72 bg-white flex flex-col p-6 border-r border-gray-200 shadow-lg">
     <!-- Logo / Header -->
     <div class="flex items-center space-x-4 mb-10">
-        <div class="p-3 bg-bri-blue rounded-xl shadow-md">
-            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0l3-3m0 0l3 3m-3-3v12">
-                </path>
-            </svg>
-        </div>
-        <span class="text-3xl font-bold text-bri-blue">DataBOX</span>
+        <img src="{{ asset('images/logo-bri.png') }}" alt="BRI Logo" class="w-auto h-20">
     </div>
 
     <!-- New / Upload Dropdown -->
     <div x-data="{ open: false }" class="relative mb-8">
         @auth
             <button @click="open = !open" 
-                    class="w-full flex items-center justify-center space-x-2 bg-white text-gray-700 font-semibold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ring-bri-blue border border-gray-200 transform hover:-translate-y-1">
+                    class="w-full flex items-center justify-center space-x-2 bg-bri-blue text-white font-semibold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-bri-blue-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ring-bri-blue transform hover:-translate-y-1">
                 <span class="material-symbols-outlined">add_circle</span>
                 <span>New</span>
                 <span class="material-symbols-outlined transition-transform" :class="{ 'rotate-180': open }">expand_more</span>
@@ -53,25 +46,31 @@
             <li>
                 <a href="{{ route('file.index') }}" 
                    class="flex items-center space-x-4 p-3 rounded-xl transition-all duration-200 {{ request()->routeIs('file.index') || request()->routeIs('file.folder') ? 'text-white font-bold bg-bri-blue shadow-lg' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
-                    <span class="material-symbols-outlined">folder_managed</span>
-                    <span>My File</span>
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="text-lg">Dashboard</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('recent') }}" 
                    class="flex items-center space-x-4 p-3 rounded-xl transition-all duration-200 {{ request()->routeIs('recent') ? 'text-white font-bold bg-bri-blue shadow-lg' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                     <span class="material-symbols-outlined">history</span>
-                    <span>Recent</span>
+                    <span class="text-lg">Recent</span>
                 </a>
             </li>
-            <li>
-                <a href="{{ route('trash') }}" 
-                   class="flex items-center space-x-4 p-3 rounded-xl transition-all duration-200 {{ request()->routeIs('trash') ? 'text-white font-bold bg-bri-blue shadow-lg' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
-                    <span class="material-symbols-outlined">delete</span>
-                    <span>Trash</span>
-                </a>
-            </li>
-        </ul>
+                        <li>
+                            <a href="{{ route('trash') }}"
+                               class="flex items-center space-x-4 p-3 rounded-xl transition-all duration-200 {{ request()->routeIs('trash') ? 'text-white font-bold bg-bri-blue shadow-lg' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                                <span class="material-symbols-outlined">delete</span>
+                                <span class="text-lg">Trash</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('profile.edit') }}"
+                               class="flex items-center space-x-4 p-3 rounded-xl transition-all duration-200 {{ request()->routeIs('profile.edit') ? 'text-white font-bold bg-bri-blue shadow-lg' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                                <span class="material-symbols-outlined">person</span>
+                                <span>Profile</span>
+                            </a>
+                        </li>        </ul>
     </nav>
 
     <!-- Footer -->

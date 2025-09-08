@@ -1,7 +1,7 @@
 <div>
     <!-- Breadcrumbs -->
     <nav class="flex items-center text-sm font-medium text-gray-500 mb-4">
-        <a href="{{ route('file.index') }}" class="hover:text-bri-blue">My Files</a>
+        <a href="{{ route('file.index') }}" class="hover:text-bri-blue"></a>
         @if(isset($breadcrumbs))
             @foreach ($breadcrumbs as $breadcrumb)
                 <span class="mx-2">/</span>
@@ -12,9 +12,9 @@
 
     <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">{{ $folder->name ?? 'My Files' }}</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">{{ $folder->name ?? '' }}</h2>
         <div class="flex items-center space-x-2">
-            <!-- Sorting & filtering bisa ditaruh di sini -->
+            <!-- Sorting & filtering can be placed here -->
         </div>
     </div>
 
@@ -43,10 +43,10 @@
 
     <!-- File & Folder List -->
     <div class="bg-white rounded-xl shadow-lg border border-gray-200">
-        <div class="hidden md:grid grid-cols-12 gap-4 text-sm font-semibold text-gray-600 px-6 py-4 border-b border-gray-200">
-            <div class="col-span-5 pl-4">Nama</div>
-            <div class="col-span-3">Terakhir diubah</div>
-            <div class="col-span-2">Ukuran</div>
+        <div class="hidden md:grid grid-cols-12 gap-4 text-sm font-semibold text-gray-600 px-6 py-4 border-b border-gray-200 rounded-t-xl">
+            <div class="col-span-5 pl-4">Name</div>
+            <div class="col-span-3">Last Modified</div>
+            <div class="col-span-2">Size</div>
             <div class="col-span-2"></div>
         </div>
 
@@ -54,7 +54,7 @@
             <div class="group relative border-b border-gray-200 last:border-b-0">
                 <a href="{{ $item->is_folder ? route('file.folder', $item) : route('file.preview', $item) }}" 
                    target="{{ $item->is_folder ? '_self' : '_blank' }}"
-                   class="grid grid-cols-12 gap-4 items-center px-6 py-3 hover:bg-gray-50 transition-colors duration-200">
+                   class="grid grid-cols-12 gap-4 items-center px-6 py-3 hover:bg-gray-50 transition-colors duration-200 transform hover:-translate-y-1 hover:shadow-lg transition-transform">
                     
                     <div class="col-span-5 flex items-center space-x-4">
                         <x-file-icon :item="$item" class="w-8 h-8" />
@@ -65,11 +65,11 @@
                     <div class="col-span-2 text-sm text-gray-500 hidden md:block">{{ $item->is_folder ? '—' : \Illuminate\Support\Number::fileSize($item->size) }}</div>
                 </a>
                 
-                <!-- Menu aksi (Download, Rename, Delete) -->
+                <!-- Action Menu (Download, Rename, Delete) -->
                 <div class="absolute top-1/2 right-4 -translate-y-1/2 flex items-center justify-end space-x-2">
-                    <div x-data="{ open: false }" class="relative inline-block text-left">
+                    <div x-data="{ open: false, init() { this.$watch('open', value => { if (value) { this.$dispatch('close-all-dropdowns', this.$el) } }) }, closeOthers(el) { if (this.$el !== el) { this.open = false } } }" @close-all-dropdowns.window="closeOthers($event.detail)" class="relative inline-block text-left">
                         <button @click.stop.prevent="open = !open" 
-                                class="text-gray-500 hover:text-gray-700 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bri-blue transition-colors opacity-0 group-hover:opacity-100">
+                                class="text-gray-500 hover:text-gray-700 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bri-blue transition-colors">
                             <span class="material-symbols-outlined">more_vert</span>
                         </button>
                         <div x-show="open" 
@@ -83,20 +83,17 @@
                              x-transition:leave-start="transform opacity-100 scale-100"
                              x-transition:leave-end="transform opacity-0 scale-95">
                             <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
-                                @if (!$item->is_folder)
-                                    <a href="{{ route('file.download', $item) }}" 
-                                       class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                        <span class="material-symbols-outlined mr-3">download</span>
-                                        <span>Download</span>
-                                    </a>
-                                @endif
-                                <a href="#" 
+                                                                    <a href="{{ $item->is_folder ? route('folder.download', $item) : route('file.download', $item) }}"
+                                                                       class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                                                        <span class="material-symbols-outlined mr-3">download</span>
+                                                                        <span>Download</span>
+                                                                    </a>                                <a href="#" 
                                    @click.prevent="showEditModal = true; editItem = { id: {{ $item->id }}, name: @js($item->name), action: '{{ route('file.update', $item) }}' }; open = false" 
                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                     <span class="material-symbols-outlined mr-3">drive_file_rename_outline</span>
                                     <span>Rename</span>
                                 </a>
-                                <form action="{{ route('file.delete', $item) }}" method="POST" 
+                                <form action="{{ route('file.destroy', $item) }}" method="POST" 
                                       onsubmit="return confirm('Are you sure you want to delete this {{ $item->is_folder ? 'folder' : 'file' }}?')">
                                     @csrf
                                     @method('DELETE')
@@ -114,7 +111,7 @@
         @empty
             <div class="p-8 text-center text-gray-500">
                 <span class="material-symbols-outlined text-6xl text-gray-300">folder_open</span>
-                <p class="mt-4 text-lg">{{ isset($folder) && $folder ? 'Folder ini kosong.' : 'Tidak ada file atau folder.' }}</p>
+                <p class="mt-4 text-lg">{{ isset($folder) && $folder ? 'This folder is empty.' : 'No files or folders.' }}</p>
             </div>
         @endforelse
     </div>
